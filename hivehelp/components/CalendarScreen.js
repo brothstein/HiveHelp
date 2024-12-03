@@ -8,15 +8,16 @@ import {
   TextInput,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { supabase } from '../supabase'; 
+import { supabase } from "../supabase";
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "./ThemeProvider.js";
 
-  const CalendarScreen = ({ user_id }) => { // Accept user_id as a prop
-    const { colorScheme } = useTheme();
+const CalendarScreen = ({ user_id }) => {
+  // Accept user_id as a prop
+  const { colorScheme } = useTheme();
 
-  // Get the current date in the format 'YYYY-MM-DD'
-  const currentDate = '2024-04-11'
+  // Get the current date in the format 'YYYY-MM-DD'a
+  const currentDate = "2024-04-11";
 
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -25,19 +26,21 @@ import { useTheme } from "./ThemeProvider.js";
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventDescription, setNewEventDescription] = useState("");
-  const [newEventTime, setNewEventTime] = useState("")
+  const [newEventTime, setNewEventTime] = useState("");
   const [newEventDate, setNewEventDate] = useState("");
   const [newEventDotColor, setNewEventDotColor] = useState(
-    colorScheme.primaryRich,
+    colorScheme.primaryRich
   );
   const [markedDates, setMarkedDates] = useState({});
 
-  const colorOptions = [ '#FFD6A5',
-  '#C9E4DE', 
-  '#C6DEF1', 
-  '#DBCDF0', 
-  '#F2C6DE', 
-  '#FFADAD'];
+  const colorOptions = [
+    "#FFD6A5",
+    "#C9E4DE",
+    "#C6DEF1",
+    "#DBCDF0",
+    "#F2C6DE",
+    "#FFADAD",
+  ];
 
   // Event details for different fixed dates
   const eventDetailsJSON = [
@@ -66,25 +69,26 @@ import { useTheme } from "./ThemeProvider.js";
   // gets user info
   useEffect(() => {
     const fetchUser = async () => {
-
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('name')
-        .eq('id', user.id)
+        .from("profiles")
+        .select("name")
+        .eq("id", user.id)
         .single();
 
       if (profileError) {
-        console.error('Error fetching user profile:', profileError.message);
+        console.error("Error fetching user profile:", profileError.message);
         return;
       }
 
       setUser(profile);
     };
-    
+
     fetchUser();
-  })
+  });
 
   useEffect(() => {
     fetchEvents();
@@ -92,94 +96,91 @@ import { useTheme } from "./ThemeProvider.js";
 
   const fetchEvents = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      const currentID = user.id
-      const { data, error } = await supabase.from('events').select('*').eq('user_id', currentID);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const currentID = user.id;
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("user_id", currentID);
       if (error) {
         throw error;
       }
       setEvents(data);
     } catch (error) {
-      console.error('Error fetching tasks:', error.message);
+      console.error("Error fetching tasks:", error.message);
     }
   };
 
+  // Marked dates with event details
 
-  
-    // Marked dates with event details
-    
-      const setMarkedDatesAndEvents = async () => {
-        const markedDatesObj = {};
-        events.forEach(event => {
-          markedDatesObj[event.dateString] = {
-            marked: true,
-            dotColor: colorScheme.primaryRich,
-            details: event,
-          };
-        });
-        setMarkedDates(markedDatesObj);
-        setEvents(events);
+  const setMarkedDatesAndEvents = async () => {
+    const markedDatesObj = {};
+    events.forEach((event) => {
+      markedDatesObj[event.dateString] = {
+        marked: true,
+        dotColor: colorScheme.primaryRich,
+        details: event,
       };
-      useEffect(() => {
-      if (events.length > 0) {
-        setMarkedDatesAndEvents();
-      }
-    }, [events]);
+    });
+    setMarkedDates(markedDatesObj);
+    setEvents(events);
+  };
+  useEffect(() => {
+    if (events.length > 0) {
+      setMarkedDatesAndEvents();
+    }
+  }, [events]);
 
   const addEventToDatabase = async (event) => {
     try {
-      const { data, error } = await supabase
-        .from('events')
-        .insert([{ 
+      const { data, error } = await supabase.from("events").insert([
+        {
           title: newEventTitle,
           description: newEventDescription,
           dateString: newEventDate,
           time: newEventTime,
           dotColor: newEventDotColor,
-        // Link event to the user's UUID
-        }]);
-      
+          // Link event to the user's UUID
+        },
+      ]);
+
       if (error) {
         throw error;
       }
       fetchEvents();
       const newEvent = data[0];
-      console.log(newEvent)
+      console.log(newEvent);
       setEvents(...events, newEvent);
       // Update marked dates immediately after adding the event
-    setMarkedDatesAndEvents();
-    setNewEventTitle("");
-    setNewEventDescription("");
-    setNewEventDate("");
-    setNewEventTime("");
-    setShowAddEvent(false);
-    
-      console.log('Event added to Supabase:', events);
+      setMarkedDatesAndEvents();
+      setNewEventTitle("");
+      setNewEventDescription("");
+      setNewEventDate("");
+      setNewEventTime("");
+      setShowAddEvent(false);
+
+      console.log("Event added to Supabase:", events);
       // Optionally, update the local state or perform any other action after adding the event
     } catch (error) {
-      console.error('Error adding event to Supabase:', error.message);
+      console.error("Error adding event to Supabase:", error.message);
     }
   };
-  
 
+  // Helper function to format date as MM/DD/YYYY
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined dateString
+    const [month, year, day] = dateString.split("/"); // Adjusted splitting logic
+    return `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year}`;
+  };
 
-
-// Helper function to format date as MM/DD/YYYY
-const formatDate = (dateString) => {
-  if (!dateString) return ''; // Handle null or undefined dateString
-  const [month, year, day] = dateString.split('/'); // Adjusted splitting logic
-  return `${month.padStart(2, '0')}/${day.padStart(2, '0')}/${year}`;
-};
-
-
-// Helper function to format time as HH:MM
-const formatTime = (timeString) => {
-  if (!timeString) return ''; // Handle null or undefined timeString
-  const [hour, minute] = timeString.split(':');
-  return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
-};
-
-
+  // Helper function to format time as HH:MM
+  const formatTime = (timeString) => {
+    if (!timeString) return ""; // Handle null or undefined timeString
+    const [hour, minute] = timeString.split(":");
+    return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+  };
 
   return (
     <View
@@ -225,17 +226,17 @@ const formatTime = (timeString) => {
       {/* Calendar component with marked dates and onDayPress handler */}
       <View></View>
       <Calendar
-  markedDates={markedDates}
-  style={styles.Calendar}
-  onDayPress={(day) => {
-    const selectedDateDetails = markedDates[day.dateString];
-    if (selectedDateDetails && selectedDateDetails.details) {
-      console.log("Selected date details:", events);
-      setSelectedDate(day.dateString); // Set the selected date
-      setShowModal(true);
-    }
-  }}
-/>
+        markedDates={markedDates}
+        style={styles.Calendar}
+        onDayPress={(day) => {
+          const selectedDateDetails = markedDates[day.dateString];
+          if (selectedDateDetails && selectedDateDetails.details) {
+            console.log("Selected date details:", events);
+            setSelectedDate(day.dateString); // Set the selected date
+            setShowModal(true);
+          }
+        }}
+      />
 
       {/* Add event */}
       {showAddEvent && (
@@ -462,15 +463,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: -15,
     width: 370,
-    height: '90%', // 90% of the window width
+    height: "90%", // 90% of the window width
     aspectRatio: 1, // To maintain aspect ratio
     borderRadius: 20, // To round the corners
-    overflow: 'hidden', // Clip the content to the rounded corners
+    overflow: "hidden", // Clip the content to the rounded corners
   },
   addEventSection: {
-    padding: 200, 
+    padding: 200,
     paddingHorizontal: 50,
-    
+
     align: "center",
   },
   textInput: {
@@ -506,7 +507,7 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   eventHeading: {
-    marginTop: 10, 
+    marginTop: 10,
     marginBottom: 10,
     padding: 15,
     fontSize: 30,
