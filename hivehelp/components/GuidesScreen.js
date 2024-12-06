@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Theme } from "./Theme.js"; // Importing the Theme from themes.js
+import { Theme } from "./Theme.js";
 import { useTheme } from "./ThemeProvider.js";
 
 const GuidesScreen = () => {

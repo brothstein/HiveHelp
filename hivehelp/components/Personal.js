@@ -196,15 +196,21 @@ const styles = StyleSheet.create({
     marginTop: 40,
     padding: 10,
   },
+  /* Modal Styles */
   modalContainer: {
     flex: 1,
-    //   justifyContent: 'center',
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     padding: 20,
     borderRadius: 10,
+    width: "100%",
+    maxHeight: "100%",
+  },
+  scrollContainer: {
+    flex: 1,
     width: "100%",
   },
   title: {
