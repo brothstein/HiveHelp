@@ -10,7 +10,8 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import Hexagon from "react-hexagon";
+import { ReactComponent as HexagonIcon } from "../assets/icons/hexagon.svg";
+import Hexagon from "./Hex";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import { personalData } from "./PersonalGuidesData";
 import { Theme } from "./Theme";
@@ -75,6 +76,9 @@ const Personal = () => {
       <Text style={[styles.heading, { color: colorScheme.text }]}>
         Personal Guides
       </Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Hexagon color="red" width={200} height={200} />
+      </View>
       <View style={styles.container}>
         <View style={styles.column}>
           {firstColumnData.map((item, index) => (
@@ -130,7 +134,7 @@ const Personal = () => {
                     onPress={closeModal}
                   />
                 </View>
-                <ScrollView style={styles.scrollContainer}>
+                <ScrollView contentContainerStyle={styles.scrollContent}>
                   <Text style={[styles.title, { color: colorScheme.text }]}>
                     {selectedItem.title}
                   </Text>

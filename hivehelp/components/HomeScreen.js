@@ -11,15 +11,16 @@ import TaskList from "./TaskList.json";
 import { useTheme } from "./ThemeProvider";
 import { eventDetailsJSON } from "./eventDetailsJSON";
 import { TasksScreen } from "./TasksScreen";
-
+import { Calendar } from "react-native-calendars";
 import { supabase } from "../supabase";
 
 const HomeScreen = () => {
   const { colorScheme } = useTheme();
   const navigation = useNavigation();
-
   const [user, setUser] = useState(null);
+  const [events, setEvents] = useState([]);
 
+  // Sets current user
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -90,34 +91,44 @@ const HomeScreen = () => {
 
   const completedTasks = tasks.filter((task) => task.completed);
 
-  useEffect(() => {
-    const readJsonFile = async () => {
-      try {
-        // Set tasks from the imported JSON data
-        setTasks(TaskList.tasks);
-      } catch (error) {
-        console.error("Error reading JSON file:", error);
+  const fetchEvents = async () => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const currentID = user.id;
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("user_id", currentID);
+      if (error) {
+        throw error;
       }
-    };
+      setEvents(data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error.message);
+    }
+  };
 
-    readJsonFile();
-  }, []);
+  fetchEvents();
 
   // Sets today's date to currentDate
   const currentDate = new Date().toISOString().split("T")[0];
-  const todayEvent = eventDetailsJSON[currentDate];
+  const todaysEvents = events.filter(
+    (events) => events.dateString.replace(/\//g, "-") === currentDate
+  );
+
+  console.log(todaysEvents[0]);
 
   // Set default display text
   const [displayText, setDisplayText] = useState(
     "Remember to always do what you love!"
   );
-
-  // Sets display text
+  // Sets display text Left
   const changeTextL = () => {
     setDisplayText("Remember to always do what you love!");
   };
-
-  // Sets display text
+  // Sets display text Right
   const changeTextR = () => {
     setDisplayText("It's okay to make mistakes! ");
   };
@@ -126,16 +137,15 @@ const HomeScreen = () => {
   const goToGuidePage = () => {
     navigation.navigate("Work Guides");
   };
-
   // Navigates to TaskScreen
   const goToTasks = () => {
     navigation.navigate("Tasks");
   };
-
   // Navigates to Calendar
   const goToCalendar = () => {
     navigation.navigate("Calendar");
   };
+
   return (
     <View
       style={[
@@ -310,17 +320,23 @@ const HomeScreen = () => {
             >
               Today
             </Text>
-            <View style={[{ paddingLeft: 10 }, { paddingTop: 20 }]}>
-              <Text style={[{ color: colorScheme.text }]}>
-                Date: {todayEvent.dateString}
+            {todaysEvents[0] ? (
+              <View style={[{ paddingLeft: 10 }, { paddingTop: 20 }]}>
+                <Text style={[{ color: colorScheme.text }]}>
+                  Date: {todaysEvents[0].dateString}
+                </Text>
+                <Text style={[{ color: colorScheme.text }]}>
+                  Event Title: {todaysEvents[0].title}
+                </Text>
+                <Text style={[{ color: colorScheme.text }]}>
+                  Description: {todaysEvents[0].description}
+                </Text>
+              </View>
+            ) : (
+              <Text style={[{ color: colorScheme.text }, { paddingTop: 20 }]}>
+                Nothing Today!
               </Text>
-              <Text style={[{ color: colorScheme.text }]}>
-                Event Title: {todayEvent.title}
-              </Text>
-              <Text style={[{ color: colorScheme.text }]}>
-                Description: {todayEvent.description}
-              </Text>
-            </View>
+            )}
           </View>
         </TouchableOpacity>
       </View>

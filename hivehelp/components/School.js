@@ -130,7 +130,7 @@ const SchoolGuides = () => {
                     onPress={closeModal}
                   />
                 </View>
-                <ScrollView style={styles.scrollContainer}>
+                <ScrollView contentContainerStyle={styles.scrollContent}>
                   <Text style={[styles.title, { color: colorScheme.text }]}>
                     {selectedItem.title}
                   </Text>

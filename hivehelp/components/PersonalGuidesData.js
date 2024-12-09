@@ -151,6 +151,8 @@ export const personalData = [
   {
     title: "Nutrition",
     id: 4,
+    topColor: "tertiaryRich",
+    bottomColor: "tertiary",
     sections: [
       {
         heading: "Understanding Nutrition:",
@@ -197,6 +199,8 @@ export const personalData = [
   {
     title: "Exercise",
     id: 5,
+    topColor: "primaryRich",
+    bottomColor: "primary",
     sections: [
       {
         heading: "Importance of Exercise:",
@@ -248,6 +252,8 @@ export const personalData = [
   {
     title: "Rest",
     id: 6,
+    topColor: "tertiaryRich",
+    bottomColor: "tertiary",
     sections: [
       {
         heading: "Rest is Important:",
@@ -294,6 +300,8 @@ export const personalData = [
   {
     title: "Mental Health",
     id: 7,
+    topColor: "secondaryRich",
+    bottomColor: "secondary",
     sections: [
       {
         heading: "Mental Health is Important:",

@@ -2,6 +2,8 @@ export const workData = [
   {
     title: "Interview Questions",
     id: 15,
+    topColor: "tertiaryRich",
+    bottomColor: "tertiary",
     sections: [
       {
         heading: "Nailing The Interview",
@@ -58,6 +60,8 @@ export const workData = [
   {
     title: "Interview Attire",
     id: 16,
+    topColor: "secondaryRich",
+    bottomColor: "secondary",
     sections: [
       {
         heading: "Research Company Culture",
@@ -109,6 +113,8 @@ export const workData = [
   {
     title: "First Day",
     id: 17,
+    topColor: "primaryRich",
+    bottomColor: "primary",
     sections: [
       {
         heading: "Tackling your First Day at Work",
@@ -160,6 +166,8 @@ export const workData = [
   {
     title: "Quitting",
     id: 18,
+    topColor: "tertiaryRich",
+    bottomColor: "tertiary",
     sections: [
       {
         heading: "So you Want to Quit? ",
@@ -211,6 +219,8 @@ export const workData = [
   {
     title: "PTO",
     id: 19,
+    topColor: "primaryRich",
+    bottomColor: "primary",
     sections: [
       {
         heading: "Paid Time Off",
@@ -257,6 +267,8 @@ export const workData = [
   {
     title: "401K",
     id: 20,
+    topColor: "tertiaryRich",
+    bottomColor: "tertiary",
     sections: [
       {
         heading: "Understanding 401(k)s",
@@ -298,6 +310,8 @@ export const workData = [
   {
     title: "Insurance",
     id: 21,
+    topColor: "secondaryRich",
+    bottomColor: "secondary",
     sections: [
       {
         heading: "Know Your Options:",
