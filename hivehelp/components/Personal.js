@@ -65,7 +65,9 @@ const Personal = () => {
 
   // Returns list of titles
   return (
-    <View>
+    <View
+      style={[styles.container, { backgroundColor: colorScheme.background }]}
+    >
       <View style={{ alignSelf: "flex-start" }}>
         <Button
           color={colorScheme.text}
@@ -73,36 +75,47 @@ const Personal = () => {
           onPress={() => navigation.goBack()}
         ></Button>
       </View>
-      <Text style={[styles.heading, { color: colorScheme.text }]}>
-        Personal Guides
-      </Text>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Hexagon color="red" width={200} height={200} />
-      </View>
-      <View style={styles.container}>
-        <View style={styles.column}>
-          {firstColumnData.map((item, index) => (
-            <TouchableOpacity key={index} onPress={() => handlePress(item)}>
-              <View style={styles.itemContainer}>
-                <Text style={[styles.title, { color: colorScheme.text }]}>
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+      <ScrollView style={styles.scrollContent}>
+        <Text style={[styles.heading, { color: colorScheme.text }]}>
+          Personal Guides
+        </Text>
+        <Text style={{ color: colorScheme.text }}>
+          Discover a haven of resources dedicated to self-care and personal
+          well-being. Our personal section offers valuable insights and tools to
+          nurture your mental health, promote mindfulness, and support your
+          journey toward a balanced and fulfilling life.
+        </Text>
+        <View style={styles.container}>
+          <View style={styles.column}>
+            {firstColumnData.map((item, index) => (
+              <TouchableOpacity key={index} onPress={() => handlePress(item)}>
+                <Hexagon
+                  width={200}
+                  height={200}
+                  title={item.title}
+                  colors={colorScheme[item.bottomColor]}
+                  textColor={colorScheme.text}
+                  style={styles.itemContainer}
+                ></Hexagon>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={[styles.column, styles.secondColumn]}>
+            {secondColumnData.map((item, index) => (
+              <TouchableOpacity key={index} onPress={() => handlePress(item)}>
+                <Hexagon
+                  width={200}
+                  height={200}
+                  title={item.title}
+                  colors={colorScheme[item.bottomColor]}
+                  textColor={colorScheme.text}
+                  style={styles.itemContainer}
+                ></Hexagon>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-        <View style={[styles.column, styles.secondColumn]}>
-          {secondColumnData.map((item, index) => (
-            <TouchableOpacity key={index} onPress={() => handlePress(item)}>
-              <View style={styles.itemContainer}>
-                <Text style={[styles.title, { color: colorScheme.text }]}>
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+      </ScrollView>
       {/* Modal */}
       <Modal
         animationType="slide"
@@ -134,7 +147,7 @@ const Personal = () => {
                     onPress={closeModal}
                   />
                 </View>
-                <ScrollView contentContainerStyle={styles.scrollContent}>
+                <ScrollView styles={styles.scrollContent}>
                   <Text style={[styles.title, { color: colorScheme.text }]}>
                     {selectedItem.title}
                   </Text>
@@ -153,19 +166,21 @@ const { height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
   },
   column: {
     flex: 1,
+    justifyContent: "flex-start", // Align items to the start, reducing spread
+    alignItems: "center", // Align items horizontally to the center
+    gap: 8,
   },
   secondColumn: {
     paddingTop: "20%", // Padded at the top by 20%
   },
   itemContainer: {
     marginVertical: 10,
-    marginHorizontal: 20,
     padding: 20,
-    backgroundColor: "lightgray",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -198,7 +213,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     marginTop: 40,
-    padding: 10,
   },
   /* Modal Styles */
   modalContainer: {
@@ -213,9 +227,11 @@ const styles = StyleSheet.create({
     width: "100%",
     maxHeight: "100%",
   },
-  scrollContainer: {
-    flex: 1,
-    width: "100%",
+  scrollContent: {
+    flexGrow: 1,
+    overflow: "auto", // Enable scrolling on web and mobile
+    padding: 10,
+    height: "100%", // Ensure it fits the parent container
   },
   title: {
     fontSize: 25,
@@ -237,7 +253,6 @@ const styles = StyleSheet.create({
   backButton: {
     justifyConten: "center",
     marginBottom: 80,
-    padding: 10,
     padding: 10,
     borderRadius: 10, // Back button background color
   },

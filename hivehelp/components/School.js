@@ -10,7 +10,7 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import Hexagon from "react-hexagon";
+import Hexagon from "./Hex";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import { schoolData } from "./SchoolGuideData";
 import { Theme } from "./Theme";
@@ -43,7 +43,12 @@ const SchoolGuides = () => {
   // returns list content os selected title
   const renderSections = (sections) => {
     return (
-      <View style={styles.sectionContainer}>
+      <View
+        style={[
+          styles.sectionContainer,
+          { backgroundColor: colorScheme.background },
+        ]}
+      >
         {sections.map((section, index) => (
           <View key={index} style={styles.section}>
             <Text style={[styles.sectionHeading, { color: colorScheme.text }]}>
@@ -64,7 +69,9 @@ const SchoolGuides = () => {
 
   // Returns list of titles
   return (
-    <View>
+    <View
+      style={[styles.container, { backgroundColor: colorScheme.background }]}
+    >
       <View style={{ alignSelf: "flex-start" }}>
         <Button
           color={colorScheme.text}
@@ -72,33 +79,46 @@ const SchoolGuides = () => {
           onPress={() => navigation.goBack()}
         ></Button>
       </View>
-      <Text style={[styles.heading, { color: colorScheme.text }]}>
-        School Guides
-      </Text>
-      <View style={styles.container}>
-        <View style={styles.column}>
-          {firstColumnData.map((item, index) => (
-            <TouchableOpacity key={index} onPress={() => handlePress(item)}>
-              <View style={styles.itemContainer}>
-                <Text style={[styles.title, { color: colorScheme.text }]}>
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+      <ScrollView style={styles.scrollContent}>
+        <Text style={[styles.heading, { color: colorScheme.text }]}>
+          School Guides
+        </Text>
+        <Text style={{ color: colorScheme.text }}>
+          Dive into a treasure trove of educational resources. Our school
+          category offers valuable guidance for students and lifelong learners,
+          supporting your academic journey.
+        </Text>
+        <View style={styles.container}>
+          <View style={styles.column}>
+            {firstColumnData.map((item, index) => (
+              <TouchableOpacity key={index} onPress={() => handlePress(item)}>
+                <Hexagon
+                  width={200}
+                  height={200}
+                  title={item.title}
+                  colors={colorScheme[item.bottomColor]}
+                  textColor={colorScheme.text}
+                  style={styles.itemContainer}
+                ></Hexagon>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={[styles.column, styles.secondColumn]}>
+            {secondColumnData.map((item, index) => (
+              <TouchableOpacity key={index} onPress={() => handlePress(item)}>
+                <Hexagon
+                  width={200}
+                  height={200}
+                  title={item.title}
+                  colors={colorScheme[item.bottomColor]}
+                  textColor={colorScheme.text}
+                  style={styles.itemContainer}
+                ></Hexagon>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-        <View style={[styles.column, styles.secondColumn]}>
-          {secondColumnData.map((item, index) => (
-            <TouchableOpacity key={index} onPress={() => handlePress(item)}>
-              <View style={styles.itemContainer}>
-                <Text style={[styles.title, { color: colorScheme.text }]}>
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+      </ScrollView>
       {/* Modal */}
       <Modal
         animationType="slide"
@@ -130,7 +150,7 @@ const SchoolGuides = () => {
                     onPress={closeModal}
                   />
                 </View>
-                <ScrollView contentContainerStyle={styles.scrollContent}>
+                <ScrollView styles={styles.scrollContent}>
                   <Text style={[styles.title, { color: colorScheme.text }]}>
                     {selectedItem.title}
                   </Text>
@@ -149,6 +169,7 @@ const { height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
   },
   column: {
@@ -159,9 +180,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     marginVertical: 10,
-    marginHorizontal: 20,
     padding: 20,
-    backgroundColor: "lightgray",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -194,7 +213,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     marginTop: 40,
-    padding: 10,
   },
   /* Modal Styles */
   modalContainer: {

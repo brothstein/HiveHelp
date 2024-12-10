@@ -118,8 +118,6 @@ const HomeScreen = () => {
     (events) => events.dateString.replace(/\//g, "-") === currentDate
   );
 
-  console.log(todaysEvents[0]);
-
   // Set default display text
   const [displayText, setDisplayText] = useState(
     "Remember to always do what you love!"

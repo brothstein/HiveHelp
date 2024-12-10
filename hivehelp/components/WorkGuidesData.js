@@ -1,6 +1,6 @@
 export const workData = [
   {
-    title: "Interview Questions",
+    title: "Interviews",
     id: 15,
     topColor: "tertiaryRich",
     bottomColor: "tertiary",
@@ -58,7 +58,7 @@ export const workData = [
     ],
   },
   {
-    title: "Interview Attire",
+    title: "Attire",
     id: 16,
     topColor: "secondaryRich",
     bottomColor: "secondary",

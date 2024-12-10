@@ -25,7 +25,7 @@ export const schoolData = [
     ],
   },
   {
-    title: "Paper Formatting",
+    title: "Essays",
     id: 9,
     topColor: "secondaryRich",
     bottomColor: "secondary",
